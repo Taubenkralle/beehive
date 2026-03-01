@@ -1,46 +1,46 @@
 # Beehive — Wiki
 
-**Beehive** is a biologically realistic 2D honey bee colony simulator written in C with raylib.
+**Beehive** ist ein biologisch realistischer 2D-Bienenvolk-Simulator, geschrieben in C mit raylib.
 
-The simulation models a living bee colony with real-world mechanics: bee development, task allocation, resource economics, thermoregulation, pheromone communication, and weather.
-
----
-
-## Wiki Pages
-
-| Page | Contents |
-|------|----------|
-| [Bee Lifecycle](Bee-Lifecycle) | Egg → Larva → Pupa → Adult, development timers |
-| [Roles & Tasks](Roles-and-Tasks) | All 12 worker roles, the job queue system |
-| [Resources](Resources) | Honey, nectar, pollen, wax, water — how they flow |
-| [Brood Care & Thermoregulation](Brood-Care) | Keeping 35 °C in the brood nest |
-| [Pheromone System](Pheromone-System) | Alarm, trail, Nasonov — how bees communicate |
-| [Outside World & Weather](Outside-World) | Forage sources, day/night cycle, weather |
-| [Navigation & Pathfinding](Navigation) | Flowfield BFS — thousands of bees, zero lag |
-| [Architecture Overview](Architecture) | Code structure, modules, data flow |
+Die Simulation modelliert ein lebendiges Bienenvolk mit echten Mechanismen: Bienenentwicklung, Aufgabenverteilung, Ressourcenwirtschaft, Thermoregulation, Pheromonkommunikation und Wetter.
 
 ---
 
-## Two Views
+## Wiki-Seiten
 
-The game has two camera perspectives toggled with **TAB**:
-
-### Hive View (cross-section)
-Inside the hive — comb cells, bees working, the queen at the centre.
-Shows: cell contents, bee positions, colony stats (honey, pollen, temperature, brood).
-
-### Meadow View (top-down)
-Outside world — flowers, trees, pond, the hive building.
-Shows: forage sources with fill-level indicators, forager bees in flight, weather info.
+| Seite | Inhalt |
+|-------|--------|
+| [Bienen-Lebenszyklus](Bienen-Lebenszyklus) | Ei → Larve → Puppe → Adult, Entwicklungszeiten |
+| [Rollen & Aufgaben](Rollen-und-Aufgaben) | Alle 12 Arbeiterinnen-Rollen, das Auftragssystem |
+| [Ressourcen](Ressourcen) | Honig, Nektar, Pollen, Wachs, Wasser — wie sie fließen |
+| [Brutpflege & Thermoregulation](Brutpflege) | 35 °C im Brutnest halten |
+| [Pheromon-System](Pheromon-System) | Alarm, Spur, Nasonov — wie Bienen kommunizieren |
+| [Außenwelt & Wetter](Aussenwelt) | Trachtquellen, Tag-Nacht-Rhythmus, Wetter |
+| [Navigation & Pathfinding](Navigation) | Flowfield-BFS — tausende Bienen, kein Ruckeln |
+| [Architektur](Architektur) | Code-Struktur, Module, Datenfluss |
 
 ---
 
-## Controls
+## Zwei Ansichten
 
-| Key | Action |
-|-----|--------|
-| TAB | Switch between Hive View and Meadow View |
-| P | Toggle pheromone debug overlay |
-| LMB | Drop alarm pheromone at mouse position (debug) |
-| S (held) | Drop trail pheromone at mouse position (debug) |
-| ESC | Quit |
+Das Spiel hat zwei Kameraperspektiven, zwischen denen mit **TAB** gewechselt wird:
+
+### Stock-Ansicht (Querschnitt)
+Innenleben des Bienenstocks — Wabenzellen, arbeitende Bienen, die Königin in der Mitte.
+Zeigt: Zellinhalte, Bienenpositionen, Volksdaten (Honig, Pollen, Temperatur, Brut).
+
+### Wiesen-Ansicht (Vogelperspektive)
+Außenwelt — Blumen, Bäume, Teich, das Stockgebäude.
+Zeigt: Trachtquellen mit Füllstandsanzeige, fliegende Sammlerinnen, Wetterinfos.
+
+---
+
+## Steuerung
+
+| Taste | Aktion |
+|-------|--------|
+| TAB | Zwischen Stock- und Wiesen-Ansicht wechseln |
+| P | Pheromon-Debug-Overlay ein/ausschalten |
+| LMB | Alarmpheromon an Mausposition setzen (Debug) |
+| S (gehalten) | Spurpheromon an Mausposition setzen (Debug) |
+| ESC | Beenden |
