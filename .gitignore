@@ -1,0 +1,19 @@
+# Build output
+beehive
+*.o
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# IDE / Editor
+.vscode/
+*.swp
+*.swo
+
+# Assets (add manually when ready)
+# assets/
+
+# Memory files contain session-private notes — track if you want shared context
+# memory/
