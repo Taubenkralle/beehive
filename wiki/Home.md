@@ -17,6 +17,7 @@ Die Simulation modelliert ein lebendiges Bienenvolk mit echten Mechanismen: Bien
 | [Pheromon-System](Pheromon-System) | Alarm, Spur, Nasonov — wie Bienen kommunizieren |
 | [Außenwelt & Wetter](Aussenwelt) | Trachtquellen, Tag-Nacht-Rhythmus, Wetter |
 | [Navigation & Pathfinding](Navigation) | Flowfield-BFS — tausende Bienen, kein Ruckeln |
+| [Speichersystem](Speichersystem) | Spielstand speichern und laden (F5 / F9) |
 | [Architektur](Architektur) | Code-Struktur, Module, Datenfluss |
 
 ---
@@ -43,4 +44,6 @@ Zeigt: Trachtquellen mit Füllstandsanzeige, fliegende Sammlerinnen, Wetterinfos
 | P | Pheromon-Debug-Overlay ein/ausschalten |
 | LMB | Alarmpheromon an Mausposition setzen (Debug) |
 | S (gehalten) | Spurpheromon an Mausposition setzen (Debug) |
+| F5 | Spielstand speichern |
+| F9 | Spielstand laden |
 | ESC | Beenden |

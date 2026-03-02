@@ -8,8 +8,8 @@
 ---
 
 ## Aktueller Stand
-**Aktive Phase:** Phase 9 — Visuelle Überarbeitung
-**Letzter abgeschlossener Schritt:** Phase 8 vollständig ✅
+**Aktive Phase:** Spätere Milestones (Phase 10 abgeschlossen)
+**Letzter abgeschlossener Schritt:** Phase 10 vollständig ✅
 
 ---
 
@@ -25,8 +25,8 @@
 | 6 | Sim-Welt — Außenweltsimulation | ✅ |
 | 7 | Pathfinding — Flowfields | ✅ |
 | 8 | Integration — Simulation trifft Rendering | ✅ |
-| 9 | Visuelle Überarbeitung — Realistische Farben | ⬜ |
-| 10 | Speichersystem | ⬜ |
+| 9 | Visuelle Überarbeitung — Realistische Farben | ✅ |
+| 10 | Speichersystem | ✅ |
 
 ---
 
@@ -434,10 +434,12 @@
 **Ziel:** Spielstand speichern und laden.
 **Abhängigkeiten:** Phase 8.
 
-- [ ] Binäres Format (schnell, einfach): `fwrite(&spiel, sizeof(Spielzustand), 1, datei)`
-- [ ] Speichern: `speicher_schreiben(const Spielzustand* spiel, const char* pfad)`
-- [ ] Laden: `speicher_lesen(Spielzustand* spiel, const char* pfad)`
-- [ ] Versionsnummer im Header (für spätere Kompatibilität)
+- [x] Binäres Format: SpeicherHeader (magic "BEEH", version, datengroesse) + raw Spielzustand
+- [x] `speicher_schreiben(const Spielzustand* spiel, const char* pfad)` → beehive.sav
+- [x] `speicher_lesen(Spielzustand* spiel, const char* pfad)` — prüft magic, version, size
+- [x] `speicher_vorhanden(const char* pfad)` — Existenz-Check
+- [x] Auto-Load beim Start wenn beehive.sav vorhanden
+- [x] F5: Speichern, F9: Laden — Status-Meldung 2 Sekunden eingeblendet
 
 ---
 
