@@ -49,12 +49,12 @@ void wiese_init(Spielzustand* spiel) {
     (void)spiel;
 
     Color bluetenpalette[] = {
-        {240,  80,  80, 255},   // Rot
-        {250, 200,  40, 255},   // Gelb
-        {180, 120, 220, 255},   // Lavendel
-        {255, 160,  60, 255},   // Orange
-        {255, 220, 200, 255},   // Weissrosa
-        {100, 200, 120, 255},   // Gruengelb
+        {196,  32,  32, 255},   // Kraeftiges Rot  #C42020
+        {228,  56,  56, 255},   // Leuchtendes Rot #E43838
+        {240, 160,  20, 255},   // Sattes Orange
+        {160,  60, 210, 255},   // Tiefes Lavendel
+        {255, 200,  40, 255},   // Sonniges Gelb
+        { 80, 180,  80, 255},   // Wiesengruen
     };
 
     for (int i = 0; i < MAX_BLUMEN; i++) {
@@ -147,41 +147,44 @@ static void zeichne_blume(const Blume* b, float zeit) {
 }
 
 static void zeichne_baum(Vector2 pos, float radius) {
-    // Stamm
+    // Trunk — dark bark
     DrawRectangle((int)(pos.x - 7), (int)(pos.y + radius * 0.4f),
-                  14, (int)(radius * 0.9f), (Color){90, 55, 20, 255});
-    // Kronenschatten
-    DrawCircleV((Vector2){pos.x + 4, pos.y + 4}, radius, (Color){20, 60, 20, 60});
-    // Krone
-    DrawCircleV(pos, radius, (Color){38, 110, 42, 255});
-    // Lichtreflex
-    DrawCircleV((Vector2){pos.x - radius * 0.3f, pos.y - radius * 0.3f},
-                radius * 0.45f, (Color){60, 150, 55, 180});
+                  14, (int)(radius * 0.9f), (Color){58, 34, 10, 255});
+    // Crown shadow for depth
+    DrawCircleV((Vector2){pos.x + 5, pos.y + 5}, radius, (Color){10, 36, 10, 90});
+    // Main crown — deep forest green
+    DrawCircleV(pos, radius, (Color){28, 82, 28, 255});
+    // Secondary crown layer
+    DrawCircleV((Vector2){pos.x - 6, pos.y - 4}, radius * 0.75f, (Color){34, 96, 34, 255});
+    // Light catch highlight
+    DrawCircleV((Vector2){pos.x - radius * 0.32f, pos.y - radius * 0.32f},
+                radius * 0.38f, (Color){52, 128, 44, 200});
 }
 
 static void zeichne_wiesenbiene(Vector2 pos, float animzeit) {
     float flattern = sinf(animzeit * 20.0f) * 2.0f;
 
-    // Fluegel (von oben: zwei Kreise seitlich)
-    DrawCircleV((Vector2){pos.x - 6, pos.y - 3 + flattern}, 5, (Color){220, 240, 255, 130});
-    DrawCircleV((Vector2){pos.x + 6, pos.y - 3 - flattern}, 5, (Color){220, 240, 255, 130});
+    // Wings — iridescent, semi-transparent
+    DrawCircleV((Vector2){pos.x - 6, pos.y - 4 + flattern}, 5, (Color){200, 228, 255, 100});
+    DrawCircleV((Vector2){pos.x + 6, pos.y - 4 - flattern}, 5, (Color){200, 228, 255, 100});
 
-    // Koerper (Vogelperspektive: ovale Form)
-    DrawEllipse((int)pos.x,     (int)pos.y, 8, 5, (Color){218, 172,   0, 255});
-    DrawEllipse((int)pos.x - 1, (int)pos.y, 2, 5, (Color){ 50,  28,   0, 200});
-    DrawEllipse((int)pos.x + 3, (int)pos.y, 2, 5, (Color){ 50,  28,   0, 200});
+    // Body — dark brown base with amber bands (top-down view)
+    DrawEllipse((int)pos.x,     (int)pos.y, 8, 5, (Color){ 40,  22,   5, 255}); // dark brown
+    DrawEllipse((int)pos.x - 1, (int)pos.y, 2, 5, (Color){148,  88,  12, 210}); // amber band
+    DrawEllipse((int)pos.x + 3, (int)pos.y, 2, 5, (Color){136,  78,  10, 210}); // amber band
 }
 
 // ---------------------------------------------------------------------------
 // Wiese zeichnen
 // ---------------------------------------------------------------------------
 void wiese_zeichnen(const Spielzustand* spiel) {
-    ClearBackground((Color){120, 195, 100, 255});
+    // Rich meadow green — reference #3A7A28–#4A8C2A
+    ClearBackground((Color){52, 108, 36, 255});
 
-    // Helligkeitsverlauf ueber die Wiese
+    // Brightness gradient: lighter sky-green at top, deeper grass at bottom
     for (int i = 0; i < 12; i++) {
         DrawRectangle(0, i * (FENSTER_HOEHE / 12), FENSTER_BREITE, FENSTER_HOEHE / 12,
-                      (Color){160, 220, 130, (unsigned char)((18 - i) * 4)});
+                      (Color){80, 160, 50, (unsigned char)((14 - i) * 5)});
     }
 
     // Feldweg vom Stock zur Wiesenflaeche
@@ -201,27 +204,54 @@ void wiese_zeichnen(const Spielzustand* spiel) {
     for (int i = 0; i < MAX_BLUMEN; i++)
         zeichne_blume(&blumen[i], spiel->zeit);
 
-    // Stock-Gebaeude (linke Seite)
-    int gx = 50, gy = 280;
-    DrawRectangle(gx - 10, gy + 185, 160, 12, (Color){80, 50, 18, 255});
-    DrawRectangleRounded((Rectangle){(float)gx, (float)gy + 100, 140, 90}, 0.05f, 4, (Color){140, 90, 35, 255});
-    DrawRectangleRounded((Rectangle){(float)gx, (float)gy + 10,  140, 90}, 0.05f, 4, (Color){120, 75, 28, 255});
-    DrawRectangleRounded((Rectangle){(float)gx, (float)gy - 20,  140, 30}, 0.05f, 4, (Color){140, 90, 35, 255});
-    // Dach
+    // Stock-Gebaeude — organic layered hive, dark amber-black palette
+    // Reference: hive.jpeg — #1A0F0A (outer), #3D2010 (mid), #8B5E2A (highlight)
+    int gx = 45, gy = 260;
+
+    // Ground platform / Bodenbrett
+    DrawRectangle(gx - 12, gy + 210, 168, 10, (Color){46, 26, 8, 255});
+    DrawRectangle(gx - 8,  gy + 205, 160, 6,  (Color){60, 36, 10, 255});
+
+    // Three stacked hive bodies — each slightly different shade
+    // Bottom box (darkest)
+    DrawRectangleRounded((Rectangle){(float)gx, (float)gy + 140, 144, 66}, 0.08f, 6, (Color){ 38, 20,  6, 255});
+    DrawRectangleRounded((Rectangle){(float)gx, (float)gy + 140, 144, 66}, 0.08f, 6, (Color){ 60, 34, 10,  40});
+    // Middle box
+    DrawRectangleRounded((Rectangle){(float)gx, (float)gy +  72, 144, 68}, 0.08f, 6, (Color){ 50, 28,  8, 255});
+    // Top box (slightly lighter)
+    DrawRectangleRounded((Rectangle){(float)gx, (float)gy +   8, 144, 64}, 0.08f, 6, (Color){ 58, 32, 10, 255});
+
+    // Amber highlights on box edges (propolis-stained wood)
+    DrawRectangleLines(gx,     gy + 140, 144, 66, (Color){100, 60, 18, 120});
+    DrawRectangleLines(gx,     gy +  72, 144, 68, (Color){ 92, 54, 16, 120});
+    DrawRectangleLines(gx,     gy +   8, 144, 64, (Color){ 84, 48, 14, 120});
+
+    // Inner warmth glow — amber visible through hive body
+    DrawRectangleRounded((Rectangle){(float)gx + 20, (float)gy + 90, 104, 110}, 0.15f, 4, (Color){140, 80, 18, 18});
+
+    // Roof — dark trapezoid, slightly overhanging
     Vector2 dach[] = {
-        {(float)gx - 15, (float)gy - 20},
-        {(float)gx + 155, (float)gy - 20},
-        {(float)gx + 140, (float)gy - 50},
-        {(float)gx + 10,  (float)gy - 50},
+        {(float)gx - 16, (float)gy + 10},
+        {(float)gx + 160, (float)gy + 10},
+        {(float)gx + 148, (float)gy - 32},
+        {(float)gx -   4, (float)gy - 32},
     };
-    DrawTriangle(dach[0], dach[3], dach[2], (Color){100, 60, 20, 255});
-    DrawTriangle(dach[0], dach[2], dach[1], (Color){100, 60, 20, 255});
-    // Einflugsloch
-    DrawRectangleRounded((Rectangle){(float)gx + 45, (float)gy + 175, 50, 12},
-                         0.5f, 4, (Color){20, 10, 2, 255});
-    DrawLine(gx, gy + 100, gx + 140, gy + 100, (Color){90, 55, 18, 255});
-    DrawLine(gx, gy + 10,  gx + 140, gy + 10,  (Color){90, 55, 18, 255});
-    DrawText("Bienenstock", gx + 15, gy - 80, 16, (Color){80, 50, 15, 255});
+    DrawTriangle(dach[0], dach[3], dach[2], (Color){26, 14, 4, 255});
+    DrawTriangle(dach[0], dach[2], dach[1], (Color){26, 14, 4, 255});
+    // Roof highlight edge
+    DrawLineEx((Vector2){dach[3].x, dach[3].y}, (Vector2){dach[2].x, dach[2].y},
+               2.0f, (Color){80, 48, 14, 180});
+    DrawLineEx((Vector2){dach[0].x, dach[0].y}, (Vector2){dach[1].x, dach[1].y},
+               2.0f, (Color){72, 42, 12, 180});
+
+    // Entrance slot
+    DrawRectangleRounded((Rectangle){(float)gx + 40, (float)gy + 196, 64, 10},
+                         0.5f, 4, (Color){8, 4, 1, 255});
+    DrawRectangleRoundedLines((Rectangle){(float)gx + 40, (float)gy + 196, 64, 10},
+                               0.5f, 4, (Color){80, 48, 14, 160});
+
+    // Label
+    DrawText("Bienenstock", gx + 10, gy - 60, 14, (Color){90, 58, 18, 200});
 
     // Trachtquellen (sim data)
     for (int i = 0; i < spiel->quellen_anzahl; i++) {

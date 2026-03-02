@@ -53,15 +53,24 @@ static ZellenTyp berechne_zellentyp(int spalte, int zeile) {
 
 static Color zellenfarbe(ZellenTyp typ) {
     switch (typ) {
-        case ZELLE_HONIG_OFFEN: return (Color){210, 140,  18, 255};
-        case ZELLE_HONIG_VERD:  return (Color){232, 200,  74, 255};
-        case ZELLE_POLLEN:      return (Color){215, 185,  40, 255};
-        case ZELLE_BRUT_LARVE:  return (Color){195, 160, 115, 255};
-        case ZELLE_BRUT_EI:     return (Color){240, 230, 200, 255};
-        case ZELLE_BRUT_PUPPE:  return (Color){200, 165,  80, 255};
-        case ZELLE_WACHSBAU:    return (Color){237, 216, 112, 255};
-        case ZELLE_KOENIGIN:    return (Color){170,  70, 200, 255};
-        default:                return (Color){ 30,  16,   4, 255};
+        // Honey: deep amber gloss — reference #B85C00–#D4700A
+        case ZELLE_HONIG_OFFEN: return (Color){184,  92,   0, 255};
+        // Capped honey: matte cream-yellow — reference #E8C84A–#F0D060
+        case ZELLE_HONIG_VERD:  return (Color){236, 204,  68, 255};
+        // Pollen: vivid orange-yellow — reference #E8820A–#F5A020
+        case ZELLE_POLLEN:      return (Color){232, 130,  10, 255};
+        // Larva: pearlescent cream-white — reference #F0ECD0–#E8E0B0
+        case ZELLE_BRUT_LARVE:  return (Color){238, 228, 196, 255};
+        // Egg: very pale ivory
+        case ZELLE_BRUT_EI:     return (Color){248, 242, 224, 255};
+        // Pupa: warm gold-beige, capped — reference #C8A050–#D4B060
+        case ZELLE_BRUT_PUPPE:  return (Color){204, 162,  74, 255};
+        // Wax under construction: pale cream-yellow — reference #EDD870–#F5E8A0
+        case ZELLE_WACHSBAU:    return (Color){240, 222, 128, 255};
+        // Queen area: deep violet
+        case ZELLE_KOENIGIN:    return (Color){130,  40, 170, 255};
+        // Empty: dark amber depth — reference #7A4A10–#8B5520
+        default:                return (Color){ 82,  44,   8, 255};
     }
 }
 
@@ -71,21 +80,22 @@ static Color zellenfarbe(ZellenTyp typ) {
 static void zeichne_stockbiene(Vector2 pos, bool ist_koenigin, float animzeit) {
     float flattern = sinf(animzeit * 22.0f) * 2.5f;
 
-    // Fluegel
-    DrawCircleV((Vector2){pos.x - 7, pos.y - 5 + flattern}, 5, (Color){220, 240, 255, 110});
-    DrawCircleV((Vector2){pos.x + 7, pos.y - 5 - flattern}, 5, (Color){220, 240, 255, 110});
+    // Wings: semi-transparent, iridescent tint
+    DrawCircleV((Vector2){pos.x - 7, pos.y - 5 + flattern}, 5, (Color){210, 235, 255, 80});
+    DrawCircleV((Vector2){pos.x + 7, pos.y - 5 - flattern}, 5, (Color){210, 235, 255, 80});
 
     if (ist_koenigin) {
-        // Koenigin: groesser, lila-amber
-        DrawEllipse((int)pos.x, (int)pos.y, 13, 7, (Color){170,  70, 200, 255});
-        DrawEllipse((int)pos.x, (int)pos.y,  4, 7, (Color){ 60,  20,  80, 200});
-        DrawCircle((int)pos.x + 11, (int)pos.y - 1, 2, (Color){30, 10, 50, 255});
+        // Queen: elongated, dark violet body with amber head
+        DrawEllipse((int)pos.x,      (int)pos.y, 14, 6, (Color){ 48,  18,  64, 255}); // dark body
+        DrawEllipse((int)pos.x - 4,  (int)pos.y,  5, 6, (Color){ 90,  38, 110, 255}); // mid segment
+        DrawEllipse((int)pos.x + 5,  (int)pos.y,  4, 5, (Color){ 72,  24,  90, 255}); // abdomen tip
+        DrawCircle ((int)pos.x + 13, (int)pos.y - 1, 3, (Color){160, 100,  10, 255}); // amber head
     } else {
-        // Arbeiterin: gelb-schwarz gestreift
-        DrawEllipse((int)pos.x,     (int)pos.y, 9, 5, (Color){218, 172,   0, 255});
-        DrawEllipse((int)pos.x - 1, (int)pos.y, 3, 5, (Color){ 55,  32,   0, 200});
-        DrawEllipse((int)pos.x + 4, (int)pos.y, 2, 5, (Color){ 55,  32,   0, 200});
-        DrawCircle((int)pos.x + 8, (int)pos.y - 1, 1, (Color){20, 10, 0, 255});
+        // Worker: dark brown body with two subtle amber bands — realistic, not comic-yellow
+        DrawEllipse((int)pos.x,     (int)pos.y, 9, 5, (Color){ 42,  24,   6, 255}); // dark brown base
+        DrawEllipse((int)pos.x - 1, (int)pos.y, 2, 5, (Color){148,  88,  12, 200}); // amber band 1
+        DrawEllipse((int)pos.x + 3, (int)pos.y, 2, 5, (Color){140,  80,  10, 200}); // amber band 2
+        DrawCircle ((int)pos.x + 8, (int)pos.y - 1, 2, (Color){ 58,  34,   8, 255}); // head
     }
 }
 
@@ -129,21 +139,22 @@ void bienenstock_aktualisieren(Spielzustand* spiel, float delta) {
 // Zeichnen der Querschnitt-Ansicht
 // ---------------------------------------------------------------------------
 void bienenstock_zeichnen(const Spielzustand* spiel) {
-    ClearBackground((Color){22, 11, 3, 255});
-    DrawRectangle(0, 0, FENSTER_BREITE, FENSTER_HOEHE, (Color){44, 24, 8, 255});
+    // Deep hive interior — almost-black warm brown, like inside a wooden box
+    ClearBackground((Color){14, 7, 2, 255});
+    DrawRectangle(0, 0, FENSTER_BREITE, FENSTER_HOEHE, (Color){28, 14, 4, 255});
 
-    // Holzrahmen
+    // Wood frame — darker, richer grain
     int rahmen = 30;
-    DrawRectangle(0, 0, rahmen, FENSTER_HOEHE, (Color){60, 34, 12, 255});
-    DrawRectangle(FENSTER_BREITE - rahmen, 0, rahmen, FENSTER_HOEHE, (Color){60, 34, 12, 255});
-    DrawRectangle(0, 0, FENSTER_BREITE, rahmen - 10, (Color){60, 34, 12, 255});
-    DrawRectangle(0, FENSTER_HOEHE - rahmen + 10, FENSTER_BREITE, rahmen, (Color){60, 34, 12, 255});
+    DrawRectangle(0, 0, rahmen, FENSTER_HOEHE, (Color){52, 28, 8, 255});
+    DrawRectangle(FENSTER_BREITE - rahmen, 0, rahmen, FENSTER_HOEHE, (Color){52, 28, 8, 255});
+    DrawRectangle(0, 0, FENSTER_BREITE, rahmen - 10, (Color){52, 28, 8, 255});
+    DrawRectangle(0, FENSTER_HOEHE - rahmen + 10, FENSTER_BREITE, rahmen, (Color){52, 28, 8, 255});
 
-    // Holzmaserung
-    for (int i = 0; i < 8; i++) {
-        int x = 5 + i * 3;
-        DrawLine(x, 0, x, FENSTER_HOEHE, (Color){70, 42, 15, 60});
-        DrawLine(FENSTER_BREITE - x, 0, FENSTER_BREITE - x, FENSTER_HOEHE, (Color){70, 42, 15, 60});
+    // Wood grain lines
+    for (int i = 0; i < 10; i++) {
+        int x = 4 + i * 3;
+        DrawLine(x, 0, x, FENSTER_HOEHE, (Color){68, 40, 12, 80});
+        DrawLine(FENSTER_BREITE - x, 0, FENSTER_BREITE - x, FENSTER_HOEHE, (Color){68, 40, 12, 80});
     }
 
     // Einflugsloch unten mittig
@@ -162,11 +173,15 @@ void bienenstock_zeichnen(const Spielzustand* spiel) {
 
             DrawPoly(mitte, 6, HEX_RADIUS - 0.5f, 0.0f, farbe);
 
-            // Honigzellen: leichter Glanzeffekt (Wachsdeckel)
-            if (typ == ZELLE_HONIG_OFFEN || typ == ZELLE_HONIG_VERD)
-                DrawPoly(mitte, 6, HEX_RADIUS * 0.55f, 0.0f, (Color){240, 185, 60, 60});
+            // Honey: warm amber gloss centre (light catching liquid surface)
+            if (typ == ZELLE_HONIG_OFFEN)
+                DrawPoly(mitte, 6, HEX_RADIUS * 0.45f, 0.0f, (Color){220, 140, 20, 70});
+            // Capped honey: matte wax sheen
+            if (typ == ZELLE_HONIG_VERD)
+                DrawPoly(mitte, 6, HEX_RADIUS * 0.60f, 0.0f, (Color){245, 225, 140, 50});
 
-            DrawPolyLinesEx(mitte, 6, HEX_RADIUS, 0.0f, 1.2f, (Color){18, 9, 2, 55});
+            // Cell walls: dark propolis-brown, clearly visible
+            DrawPolyLinesEx(mitte, 6, HEX_RADIUS, 0.0f, 1.5f, (Color){12, 6, 1, 120});
         }
     }
 
